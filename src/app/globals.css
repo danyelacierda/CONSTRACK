@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+
+  --color-background: #0f1117;
+  --color-foreground: #f1f3f7;
+
+  --color-card: #161922;
+  --color-card-foreground: #f1f3f7;
+
+  --color-popover: #161922;
+  --color-popover-foreground: #f1f3f7;
+
+  --color-primary: #f59e0b;
+  --color-primary-foreground: #000000;
+
+  --color-secondary: #222634;
+  --color-secondary-foreground: #f1f3f7;
+
+  --color-muted: #1e222e;
+  --color-muted-foreground: #94a3b8;
+
+  --color-accent: #282d3d;
+  --color-accent-foreground: #f1f3f7;
+
+  --color-destructive: #ef4444;
+  --color-destructive-foreground: #ffffff;
+
+  --color-border: #282d3d;
+  --color-input: #282d3d;
+  --color-ring: #f59e0b;
+
+  /* Industrial Status Semantic Tokens */
+  --color-status-good: #10b981;
+  --color-status-warn: #f59e0b;
+  --color-status-critical: #ef4444;
+  --color-status-info: #3b82f6;
+  --color-status-idle: #64748b;
+}
+
+:root {
+  --background: #0f1117;
+  --foreground: #f1f3f7;
+  --card: #161922;
+  --card-foreground: #f1f3f7;
+  --popover: #161922;
+  --popover-foreground: #f1f3f7;
+  --primary: #f59e0b;
+  --primary-foreground: #000000;
+  --secondary: #222634;
+  --secondary-foreground: #f1f3f7;
+  --muted: #1e222e;
+  --muted-foreground: #94a3b8;
+  --accent: #282d3d;
+  --accent-foreground: #f1f3f7;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #282d3d;
+  --input: #282d3d;
+  --ring: #f59e0b;
+  --radius: 0.5rem;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Numeric readout class for gauges, odometers, fuel amounts, costs */
+.readout {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum" 1, "zero" 1;
+  letter-spacing: -0.02em;
+}
