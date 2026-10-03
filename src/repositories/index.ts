@@ -1,16 +1,16 @@
 import {
-  mockVehicleRepository,
-  mockEquipmentRepository,
-  mockDriverRepository,
-  mockProjectRepository,
-  mockAssignmentRepository,
-  mockTripRepository,
-  mockFuelRequestRepository,
-  mockFuelTransactionRepository,
-  mockMaintenanceRepository,
-  mockAnomalyRepository,
-  mockAuditLogRepository,
-} from "./mock-repositories";
+  supabaseVehicleRepository,
+  supabaseEquipmentRepository,
+  supabaseDriverRepository,
+  supabaseProjectRepository,
+  supabaseAssignmentRepository,
+  supabaseTripRepository,
+  supabaseFuelRequestRepository,
+  supabaseFuelTransactionRepository,
+  supabaseMaintenanceRepository,
+  supabaseAnomalyRepository,
+  supabaseAuditLogRepository,
+} from "./supabase-repositories";
 import type {
   IVehicleRepository,
   IEquipmentRepository,
@@ -28,16 +28,16 @@ import type {
 // Re-export repository interfaces
 export * from "./interfaces";
 
-// Composition root: Exporting repositories under domain-agnostic names.
-// In Task 3.5, these will point to Supabase implementations without changing callers.
-export const vehicleRepository: IVehicleRepository = mockVehicleRepository;
-export const equipmentRepository: IEquipmentRepository = mockEquipmentRepository;
-export const driverRepository: IDriverRepository = mockDriverRepository;
-export const projectRepository: IProjectRepository = mockProjectRepository;
-export const assignmentRepository: IAssignmentRepository = mockAssignmentRepository;
-export const tripRepository: ITripRepository = mockTripRepository;
-export const fuelRequestRepository: IFuelRequestRepository = mockFuelRequestRepository;
-export const fuelTransactionRepository: IFuelTransactionRepository = mockFuelTransactionRepository;
-export const maintenanceRepository: IMaintenanceRepository = mockMaintenanceRepository;
-export const anomalyRepository: IAnomalyRepository = mockAnomalyRepository;
-export const auditLogRepository: IAuditLogRepository = mockAuditLogRepository;
+// Composition root: Exporting Supabase repository implementations under domain-agnostic names.
+// Every page, component, and server action imports from @/repositories.
+export const vehicleRepository: IVehicleRepository = supabaseVehicleRepository;
+export const equipmentRepository: IEquipmentRepository = supabaseEquipmentRepository;
+export const driverRepository: IDriverRepository = supabaseDriverRepository;
+export const projectRepository: IProjectRepository = supabaseProjectRepository;
+export const assignmentRepository: IAssignmentRepository = supabaseAssignmentRepository;
+export const tripRepository: ITripRepository = supabaseTripRepository;
+export const fuelRequestRepository: IFuelRequestRepository = supabaseFuelRequestRepository;
+export const fuelTransactionRepository: IFuelTransactionRepository = supabaseFuelTransactionRepository;
+export const maintenanceRepository: IMaintenanceRepository = supabaseMaintenanceRepository;
+export const anomalyRepository: IAnomalyRepository = supabaseAnomalyRepository;
+export const auditLogRepository: IAuditLogRepository = supabaseAuditLogRepository;
