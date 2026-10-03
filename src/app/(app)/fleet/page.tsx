@@ -1,5 +1,5 @@
 import React from "react";
-import { vehicleRepository, driverRepository, projectRepository } from "@/repositories";
+import { getFleetPageData } from "@/features/fleet/data";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -9,14 +9,7 @@ import { Truck, Plus, Fuel } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export default async function FleetPage() {
-  const [vehicles, drivers, projects] = await Promise.all([
-    vehicleRepository.getAll(),
-    driverRepository.getAll(),
-    projectRepository.getAll(),
-  ]);
-
-  const driverMap = new Map(drivers.map((d) => [d.id, d.fullName]));
-  const projectMap = new Map(projects.map((p) => [p.id, p.name]));
+  const { vehicles, driverMap, projectMap } = await getFleetPageData();
 
   return (
     <div className="space-y-6">

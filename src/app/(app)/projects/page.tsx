@@ -1,6 +1,5 @@
 import React from "react";
-import { projectRepository } from "@/repositories";
-import { getProjectCostSummary } from "@/services/project-cost-service";
+import { getProjectsPageData } from "@/features/projects/data";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { GaugeRing } from "@/components/shared/gauge-ring";
@@ -9,14 +8,7 @@ import { FolderKanban, MapPin, Calendar, PhilippinePeso } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
-  const projects = await projectRepository.getAll();
-
-  const costSummaries = await Promise.all(
-    projects.map(async (project) => {
-      const summary = await getProjectCostSummary(project.id);
-      return { project, summary };
-    })
-  );
+  const { costSummaries } = await getProjectsPageData();
 
   return (
     <div className="space-y-6">

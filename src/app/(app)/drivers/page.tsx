@@ -1,5 +1,5 @@
 import React from "react";
-import { driverRepository, vehicleRepository } from "@/repositories";
+import { getDriversPageData } from "@/features/drivers/data";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -8,12 +8,7 @@ import { Users, AlertCircle, CheckCircle2 } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export default async function DriversPage() {
-  const [drivers, vehicles] = await Promise.all([
-    driverRepository.getAll(),
-    vehicleRepository.getAll(),
-  ]);
-
-  const vehicleMap = new Map(vehicles.map((v) => [v.id, `${v.plateNumber} (${v.name})`]));
+  const { drivers, vehicleMap } = await getDriversPageData();
   const now = new Date();
 
   return (

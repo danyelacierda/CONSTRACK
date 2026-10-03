@@ -1,12 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import {
-  vehicleRepository,
-  fuelTransactionRepository,
-  anomalyRepository,
-  maintenanceRepository,
-  projectRepository,
-} from "@/repositories";
+import { getDashboardPageData } from "@/features/dashboard/data";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { GaugeRing } from "@/components/shared/gauge-ring";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -23,13 +17,8 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function DashboardPage() {
-  const [vehicles, transactions, anomalies, maintenanceTickets, projects] = await Promise.all([
-    vehicleRepository.getAll(),
-    fuelTransactionRepository.getAll(),
-    anomalyRepository.getOpenAnomalies(),
-    maintenanceRepository.getAll(),
-    projectRepository.getAll(),
-  ]);
+  const { vehicles, transactions, anomalies, maintenanceTickets, projects } =
+    await getDashboardPageData();
 
   const activeVehicles = vehicles.filter((v) => v.status === "Active").length;
   const totalFleet = vehicles.length;

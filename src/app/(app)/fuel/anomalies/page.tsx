@@ -1,5 +1,5 @@
 import React from "react";
-import { anomalyRepository, vehicleRepository } from "@/repositories";
+import { getAnomaliesPageData } from "@/features/anomalies/data";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -9,12 +9,7 @@ import { AlertTriangle, Info, CheckCircle2, Eye } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export default async function AnomaliesPage() {
-  const [anomalies, vehicles] = await Promise.all([
-    anomalyRepository.getAll(),
-    vehicleRepository.getAll(),
-  ]);
-
-  const vehicleMap = new Map(vehicles.map((v) => [v.id, `${v.plateNumber} (${v.name})`]));
+  const { anomalies, vehicleMap } = await getAnomaliesPageData();
 
   return (
     <div className="space-y-6">

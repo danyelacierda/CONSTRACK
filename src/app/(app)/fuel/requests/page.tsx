@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { fuelRequestRepository, vehicleRepository, driverRepository, projectRepository } from "@/repositories";
+import { getFuelRequestsPageData } from "@/features/fuel/data";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { StatusBadge } from "@/components/shared/status-badge";
@@ -9,16 +9,7 @@ import { Fuel, Plus, ArrowRight } from "lucide-react";
 export const dynamic = "force-dynamic";
 
 export default async function FuelRequestsPage() {
-  const [requests, vehicles, drivers, projects] = await Promise.all([
-    fuelRequestRepository.getAll(),
-    vehicleRepository.getAll(),
-    driverRepository.getAll(),
-    projectRepository.getAll(),
-  ]);
-
-  const vehicleMap = new Map(vehicles.map((v) => [v.id, v.plateNumber]));
-  const driverMap = new Map(drivers.map((d) => [d.id, d.fullName]));
-  const projectMap = new Map(projects.map((p) => [p.id, p.name]));
+  const { requests, vehicleMap, driverMap, projectMap } = await getFuelRequestsPageData();
 
   return (
     <div className="space-y-6">
