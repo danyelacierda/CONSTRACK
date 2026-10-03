@@ -5,6 +5,7 @@ import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { AlertTriangle, Info, CheckCircle2, Eye } from "lucide-react";
+import { RoleGuard } from "@/components/shared/role-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,8 @@ export default async function AnomaliesPage() {
   const { anomalies, vehicleMap } = await getAnomaliesPageData();
 
   return (
-    <div className="space-y-6">
+    <RoleGuard permission="anomalies:read">
+      <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight text-foreground font-mono">ANOMALY & DISCREPANCY REVIEW</h1>
         <p className="text-sm text-muted-foreground">
@@ -95,5 +97,6 @@ export default async function AnomaliesPage() {
         </CardContent>
       </Card>
     </div>
+    </RoleGuard>
   );
 }

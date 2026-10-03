@@ -5,6 +5,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@
 import { StatusBadge } from "@/components/shared/status-badge";
 import { GaugeRing } from "@/components/shared/gauge-ring";
 import { Truck, Plus, Fuel } from "lucide-react";
+import { RoleGuard } from "@/components/shared/role-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,8 @@ export default async function FleetPage() {
   const { vehicles, driverMap, projectMap } = await getFleetPageData();
 
   return (
-    <div className="space-y-6">
+    <RoleGuard permission="fleet:read">
+      <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground font-mono">FLEET INVENTORY</h1>
@@ -96,5 +98,6 @@ export default async function FleetPage() {
         </CardContent>
       </Card>
     </div>
+    </RoleGuard>
   );
 }

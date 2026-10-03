@@ -4,6 +4,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Users, AlertCircle, CheckCircle2 } from "lucide-react";
+import { RoleGuard } from "@/components/shared/role-guard";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +13,8 @@ export default async function DriversPage() {
   const now = new Date();
 
   return (
-    <div className="space-y-6">
+    <RoleGuard permission="drivers:read">
+      <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground font-mono">AUTHORIZED DRIVERS</h1>
@@ -89,5 +91,6 @@ export default async function DriversPage() {
         </CardContent>
       </Card>
     </div>
+    </RoleGuard>
   );
 }
