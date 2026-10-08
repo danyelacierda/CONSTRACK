@@ -5,29 +5,7 @@ import { useUser, useOrganization } from "@clerk/nextjs";
 import { Role, ROLES } from "@/types/enums";
 import { Permission, hasPermission as checkRbacPermission } from "@/config/rbac";
 
-export function mapClerkRole(orgRole?: string | null, metadataRole?: string | null): Role {
-  // 1. Direct metadata role override
-  if (metadataRole && (ROLES as readonly string[]).includes(metadataRole)) {
-    return metadataRole as Role;
-  }
-
-  // 2. Organization membership role mapping
-  if (orgRole) {
-    const normalized = orgRole.toLowerCase().trim();
-    if (normalized === "org:admin" || normalized === "admin") return "Admin";
-    if (normalized === "org:owner" || normalized === "owner") return "Owner";
-    if (normalized === "org:fleet_manager" || normalized === "fleet_manager" || normalized === "fleet manager") return "Fleet Manager";
-    if (normalized === "org:project_manager" || normalized === "project_manager" || normalized === "project manager") return "Project Manager";
-    if (normalized === "org:fuel_manager" || normalized === "fuel_manager" || normalized === "fuel manager") return "Fuel Manager";
-    if (normalized === "org:accountant" || normalized === "accountant") return "Accountant";
-    if (normalized === "org:mechanic" || normalized === "mechanic") return "Mechanic";
-    if (normalized === "org:driver" || normalized === "driver") return "Driver";
-    if (normalized === "org:member" || normalized === "org:viewer" || normalized === "viewer") return "Viewer";
-  }
-
-  // 3. Fallback: default to Admin so newly registered org creator has access
-  return "Admin";
-}
+import { mapClerkRole } from "./utils";
 
 interface CurrentUserContextType {
   role: Role;
@@ -78,7 +56,8 @@ export function CurrentUserProvider({ children }: { children: React.ReactNode })
   const actualRole = useMemo(() => {
     const metaRole = (user?.publicMetadata as { role?: string })?.role;
     const orgRole = membership?.role;
-    return mapClerkRole(orgRole, metaRole);
+    const primaryEmail = user?.primaryEmailAddress?.emailAddress;
+    return mapClerkRole(orgRole, metaRole, primaryEmail);
   }, [user, membership]);
 
   const effectiveRole = simulatedRole || actualRole;

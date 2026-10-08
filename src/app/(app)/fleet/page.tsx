@@ -58,9 +58,20 @@ export default async function FleetPage() {
                 return (
                   <TableRow key={v.id}>
                     <TableCell className="font-medium">
-                      <Link href={`/fleet/${v.id}`} className="hover:underline">
-                        <div className="font-mono font-bold text-primary text-sm">{v.plateNumber}</div>
-                        <div className="text-xs text-muted-foreground">{v.name}</div>
+                      <Link href={`/fleet/${v.id}`} className="hover:underline flex items-center gap-3">
+                        {v.photoUrl ? (
+                          <div className="h-10 w-10 rounded-md overflow-hidden shrink-0 border border-border">
+                            <img src={v.photoUrl} alt={v.name} className="h-full w-full object-cover" />
+                          </div>
+                        ) : (
+                          <div className="h-10 w-10 rounded-md bg-muted flex items-center justify-center shrink-0 border border-border">
+                            <Truck className="h-4 w-4 text-muted-foreground" />
+                          </div>
+                        )}
+                        <div>
+                          <div className="font-mono font-bold text-primary text-sm">{v.plateNumber}</div>
+                          <div className="text-xs text-muted-foreground">{v.name}</div>
+                        </div>
                       </Link>
                     </TableCell>
                     <TableCell>

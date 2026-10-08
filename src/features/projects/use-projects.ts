@@ -21,3 +21,10 @@ export async function archiveProject(id: string) {
   if (hasActive) throw new Error("Cannot archive project with active vehicle assignments");
   return projectRepository.update(id, { isArchived: true, status: "Completed" });
 }
+
+export async function deleteProject(id: string) {
+  const assignments = await assignmentRepository.getByProjectId(id);
+  const hasActive = assignments.some(a => a.status === "Active");
+  if (hasActive) throw new Error("Cannot delete project with active vehicle assignments");
+  return projectRepository.delete(id);
+}

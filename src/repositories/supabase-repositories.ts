@@ -307,7 +307,19 @@ function isMissingTableError(error: any): boolean {
 
 // ─── REPOSITORY IMPLEMENTATIONS ──────────────────────────────────────────────
 
+/**
+ * SupabaseVehicleRepository
+ * 
+ * Implements the IVehicleRepository interface to provide full CRUD operations
+ * for the `vehicles` table via Supabase. Includes fallback mechanisms to mock
+ * repositories in case of missing tables (e.g., during initial setup or tests).
+ */
 export class SupabaseVehicleRepository implements IVehicleRepository {
+  /**
+   * Retrieves all non-archived vehicles from the database.
+   * 
+   * @returns {Promise<Vehicle[]>} A list of active vehicles.
+   */
   async getAll(): Promise<Vehicle[]> {
     const { data, error } = await supabaseAdmin
       .from("vehicles")
@@ -412,7 +424,23 @@ export class SupabaseVehicleRepository implements IVehicleRepository {
     return data ? mapVehicle(data) : null;
   }
 
+  /**
+   * Permanently deletes a vehicle and cascades deletes to all dependent
+   * related records (anomalies, maintenance tickets, trips, etc.) to 
+   * prevent foreign key constraint violations.
+   * 
+   * @param {string} id - The ID of the vehicle to delete.
+   * @returns {Promise<boolean>} True if successful.
+   */
   async delete(id: string): Promise<boolean> {
+    // Manually cascade deletes to prevent foreign key constraint violations
+    await supabaseAdmin.from("anomalies").delete().eq("vehicle_id", id);
+    await supabaseAdmin.from("maintenance_tickets").delete().eq("vehicle_id", id);
+    await supabaseAdmin.from("fuel_transactions").delete().eq("vehicle_id", id);
+    await supabaseAdmin.from("fuel_requests").delete().eq("vehicle_id", id);
+    await supabaseAdmin.from("trips").delete().eq("vehicle_id", id);
+    await supabaseAdmin.from("vehicle_assignments").delete().eq("vehicle_id", id);
+
     const { error } = await supabaseAdmin.from("vehicles").delete().eq("id", id);
     if (error) {
       if (isMissingTableError(error)) return mockVehicleRepository.delete(id);
@@ -746,6 +774,15 @@ export class SupabaseProjectRepository implements IProjectRepository {
   }
 
   async delete(id: string): Promise<boolean> {
+    await supabaseAdmin.from("anomalies").delete().eq("project_id", id);
+    await supabaseAdmin.from("maintenance_tickets").delete().eq("project_id", id);
+    await supabaseAdmin.from("fuel_transactions").delete().eq("project_id", id);
+    await supabaseAdmin.from("fuel_requests").delete().eq("project_id", id);
+    await supabaseAdmin.from("trips").delete().eq("project_id", id);
+    await supabaseAdmin.from("vehicle_assignments").delete().eq("project_id", id);
+    await supabaseAdmin.from("equipment").update({ project_id: null }).eq("project_id", id);
+    await supabaseAdmin.from("vehicles").update({ current_project_id: null }).eq("current_project_id", id);
+
     const { error } = await supabaseAdmin.from("projects").delete().eq("id", id);
     if (error) {
       if (isMissingTableError(error)) return mockProjectRepository.delete(id);

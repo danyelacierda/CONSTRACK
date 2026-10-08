@@ -5,8 +5,9 @@ import { StatusBadge } from "@/components/shared/status-badge";
 import { RoleGuard } from "@/components/shared/role-guard";
 import { FuelWorkflowActions } from "@/features/fuel/components/fuel-workflow-actions";
 
-export default async function FuelRequestDetailPage({ params }: { params: { id: string } }) {
-  const request = await getFuelRequestById(params.id);
+export default async function FuelRequestDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const request = await getFuelRequestById(id);
   if (!request) return notFound();
 
   return (

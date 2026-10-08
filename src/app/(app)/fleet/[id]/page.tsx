@@ -5,9 +5,11 @@ import { StatusBadge } from "@/components/shared/status-badge";
 import { RoleGuard } from "@/components/shared/role-guard";
 import { VehicleDialog } from "@/features/fleet/components/vehicle-dialog";
 import { VehicleArchiveButton } from "@/features/fleet/components/vehicle-archive-button";
+import { ReportIssueDialog } from "@/features/maintenance/components/report-issue-dialog";
 
-export default async function VehicleDetailPage({ params }: { params: { id: string } }) {
-  const vehicle = await getVehicleById(params.id);
+export default async function VehicleDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const vehicle = await getVehicleById(id);
   if (!vehicle || vehicle.isArchived) return notFound();
 
   return (
@@ -19,6 +21,9 @@ export default async function VehicleDetailPage({ params }: { params: { id: stri
             <p className="text-muted-foreground">{vehicle.name} - {vehicle.make} {vehicle.model} ({vehicle.year})</p>
           </div>
           <div className="flex gap-2">
+            <RoleGuard permission="maintenance:create">
+              <ReportIssueDialog vehicleId={vehicle.id} vehicleName={`${vehicle.plateNumber} - ${vehicle.name}`} />
+            </RoleGuard>
             <RoleGuard permission="fleet:update">
               <VehicleDialog existing={vehicle} />
               <VehicleArchiveButton vehicleId={vehicle.id} />

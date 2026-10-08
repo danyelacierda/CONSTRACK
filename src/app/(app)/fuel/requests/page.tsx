@@ -11,7 +11,7 @@ import { FuelRequestDialog } from "@/features/fuel/components/fuel-request-dialo
 export const dynamic = "force-dynamic";
 
 export default async function FuelRequestsPage() {
-  const { requests, vehicleMap, driverMap, projectMap } = await getFuelRequestsPageData();
+  const { requests, vehicles, projects, vehicleMap, driverMap, projectMap } = await getFuelRequestsPageData();
 
   return (
     <RoleGuard permission="fuel:read">
@@ -24,7 +24,7 @@ export default async function FuelRequestsPage() {
           </p>
         </div>
         <RoleGuard permission="fuel:request">
-          <FuelRequestDialog />
+          <FuelRequestDialog vehicles={vehicles} projects={projects} />
         </RoleGuard>
       </div>
 

@@ -1,7 +1,7 @@
 import { ROLES, Role } from "../src/types/enums";
 import { ROLE_PERMISSIONS, hasPermission, Permission } from "../src/config/rbac";
 import { NAV_ITEMS } from "../src/config/nav";
-import { mapClerkRole } from "../src/features/auth/role-context";
+import { mapClerkRole } from "../src/features/auth/utils";
 import { TEST_USERS } from "../src/config/test-users";
 
 console.log("================================================================================");

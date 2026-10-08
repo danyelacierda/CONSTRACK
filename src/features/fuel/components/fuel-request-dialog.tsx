@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createFuelRequest } from "../actions";
 import { useCurrentUser } from "@/features/auth/role-context";
+import type { Vehicle, Project } from "@/types/domain";
 
-export function FuelRequestDialog() {
+export function FuelRequestDialog({ vehicles = [], projects = [] }: { vehicles?: Vehicle[], projects?: Project[] }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -52,9 +53,19 @@ export function FuelRequestDialog() {
           <div className="bg-background p-6 rounded-lg shadow-lg w-full max-w-md border">
             <h2 className="text-lg font-bold mb-4 font-mono">NEW FUEL REQUEST</h2>
             <form onSubmit={onSubmit} className="space-y-4">
-              <Input name="vehicleId" placeholder="Vehicle ID" required />
-              <Input name="driverId" placeholder="Driver ID" required />
-              <Input name="projectId" placeholder="Project ID" required />
+              <select name="vehicleId" className="w-full p-2 border rounded text-sm bg-background" required defaultValue="">
+                <option value="" disabled>Select Vehicle...</option>
+                {vehicles.map(v => (
+                  <option key={v.id} value={v.id}>{v.plateNumber} ({v.name})</option>
+                ))}
+              </select>
+              <Input name="driverId" placeholder="Driver ID (e.g. drv-001)" required />
+              <select name="projectId" className="w-full p-2 border rounded text-sm bg-background" required defaultValue="">
+                <option value="" disabled>Select Project...</option>
+                {projects.map(p => (
+                  <option key={p.id} value={p.id}>{p.name}</option>
+                ))}
+              </select>
               <Input name="requestedLiters" type="number" placeholder="Requested Liters" required />
               <Input name="estimatedCostPhp" type="number" placeholder="Estimated Cost (PHP)" required />
               <Input name="purpose" placeholder="Purpose" required />

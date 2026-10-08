@@ -7,8 +7,9 @@ import { DriverDialog } from "@/features/drivers/components/driver-dialog";
 import { DriverArchiveButton } from "@/features/drivers/components/driver-archive-button";
 import { AlertCircle } from "lucide-react";
 
-export default async function DriverDetailPage({ params }: { params: { id: string } }) {
-  const driver = await getDriverById(params.id);
+export default async function DriverDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const driver = await getDriverById(id);
   if (!driver || driver.isArchived) return notFound();
 
   const expiry = new Date(driver.licenseExpiry);

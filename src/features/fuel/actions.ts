@@ -3,6 +3,7 @@
 import { fuelRequestRepository, fuelTransactionRepository, auditLogRepository, anomalyRepository } from "@/repositories";
 import type { FuelRequest, FuelTransaction } from "@/types/domain";
 import { evaluateFuelTransaction } from "@/services/anomaly-engine";
+import { checkServerPermission } from "@/features/auth/server";
 
 export async function getFuelRequestById(id: string) {
   return fuelRequestRepository.getById(id);
@@ -23,6 +24,11 @@ export async function createFuelRequest(data: Omit<FuelRequest, "id" | "createdA
 }
 
 export async function approveFuelRequest(id: string, userId: string, userName: string) {
+  const isAuthorized = await checkServerPermission("fuel:approve");
+  if (!isAuthorized) {
+    throw new Error("Unauthorized: You do not have permission to approve fuel requests.");
+  }
+
   const req = await fuelRequestRepository.getById(id);
   if (!req) throw new Error("Not found");
   if (req.requestedBy === userName) throw new Error("Approver cannot be the same as requester");
@@ -46,6 +52,11 @@ export async function approveFuelRequest(id: string, userId: string, userName: s
 }
 
 export async function rejectFuelRequest(id: string, reason: string, userId: string, userName: string) {
+  const isAuthorized = await checkServerPermission("fuel:approve");
+  if (!isAuthorized) {
+    throw new Error("Unauthorized: You do not have permission to reject fuel requests.");
+  }
+
   const updated = await fuelRequestRepository.update(id, {
     status: "Rejected",
     rejectionReason: reason,
@@ -64,6 +75,11 @@ export async function rejectFuelRequest(id: string, reason: string, userId: stri
 }
 
 export async function recordFuelTransaction(data: Omit<FuelTransaction, "id" | "createdAt" | "updatedAt">, userId: string, userName: string) {
+  const isAuthorized = await checkServerPermission("fuel:purchase");
+  if (!isAuthorized) {
+    throw new Error("Unauthorized: You do not have permission to record fuel purchases.");
+  }
+
   const tx = await fuelTransactionRepository.create(data);
   await fuelRequestRepository.update(data.fuelRequestId, { status: "Purchased" });
 
@@ -80,6 +96,11 @@ export async function recordFuelTransaction(data: Omit<FuelTransaction, "id" | "
 }
 
 export async function verifyFuelTransaction(transactionId: string, userId: string, userName: string) {
+  const isAuthorized = await checkServerPermission("fuel:verify");
+  if (!isAuthorized) {
+    throw new Error("Unauthorized: You do not have permission to verify fuel transactions.");
+  }
+
   const tx = await fuelTransactionRepository.getById(transactionId);
   if (!tx) throw new Error("Transaction not found");
 
