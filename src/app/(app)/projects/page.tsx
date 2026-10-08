@@ -5,6 +5,8 @@ import { StatusBadge } from "@/components/shared/status-badge";
 import { GaugeRing } from "@/components/shared/gauge-ring";
 import { FolderKanban, MapPin, Calendar, PhilippinePeso } from "lucide-react";
 import { RoleGuard } from "@/components/shared/role-guard";
+import { ProjectDialog } from "@/features/projects/components/project-dialog";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +23,9 @@ export default async function ProjectsPage() {
             Live fuel and maintenance expenditure tracked against project budgets
           </p>
         </div>
+        <RoleGuard permission="projects:create">
+          <ProjectDialog />
+        </RoleGuard>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -39,8 +44,8 @@ export default async function ProjectsPage() {
                       <span className="font-mono text-xs font-bold text-primary">{project.code}</span>
                       <StatusBadge status={project.status} />
                     </div>
-                    <CardTitle className="text-lg font-bold mt-1 text-foreground">
-                      {project.name}
+                    <CardTitle className="text-lg font-bold mt-1 text-foreground hover:underline">
+                      <Link href={`/projects/${project.id}`}>{project.name}</Link>
                     </CardTitle>
                     <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                       <MapPin className="h-3 w-3 text-muted-foreground shrink-0" />

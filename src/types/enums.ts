@@ -169,15 +169,9 @@ export type EquipmentType = (typeof EQUIPMENT_TYPES)[number];
 // ─── User Roles (RBAC) ─────────────────────────────────────────
 // Maps to Architecture Doc RBAC matrix — 9 distinct roles.
 export const ROLES = [
-  'Owner',
   'Admin',
   'Fleet Manager',
-  'Project Manager',
-  'Fuel Manager',
-  'Accountant',
-  'Mechanic',
   'Driver',
-  'Viewer',
 ] as const;
 export type Role = (typeof ROLES)[number];
 

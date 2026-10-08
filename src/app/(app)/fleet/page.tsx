@@ -6,6 +6,8 @@ import { StatusBadge } from "@/components/shared/status-badge";
 import { GaugeRing } from "@/components/shared/gauge-ring";
 import { Truck, Plus, Fuel } from "lucide-react";
 import { RoleGuard } from "@/components/shared/role-guard";
+import { VehicleDialog } from "@/features/fleet/components/vehicle-dialog";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -22,14 +24,9 @@ export default async function FleetPage() {
             Manage dump trucks, heavy vehicles, and project assignments
           </p>
         </div>
-        <button
-          disabled
-          title="Vehicle creation will be fully enabled in Task 4"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary/40 text-primary-foreground text-sm font-semibold cursor-not-allowed opacity-70"
-        >
-          <Plus className="h-4 w-4" />
-          Add Vehicle
-        </button>
+        <RoleGuard permission="fleet:create">
+          <VehicleDialog />
+        </RoleGuard>
       </div>
 
       <Card>
@@ -61,8 +58,21 @@ export default async function FleetPage() {
                 return (
                   <TableRow key={v.id}>
                     <TableCell className="font-medium">
-                      <div className="font-mono font-bold text-foreground text-sm">{v.plateNumber}</div>
-                      <div className="text-xs text-muted-foreground">{v.name}</div>
+                      <Link href={`/fleet/${v.id}`} className="hover:underline flex items-center gap-3">
+                        {v.photoUrl ? (
+                          <div className="h-10 w-10 rounded-md overflow-hidden shrink-0 border border-border">
+                            <img src={v.photoUrl} alt={v.name} className="h-full w-full object-cover" />
+                          </div>
+                        ) : (
+                          <div className="h-10 w-10 rounded-md bg-muted flex items-center justify-center shrink-0 border border-border">
+                            <Truck className="h-4 w-4 text-muted-foreground" />
+                          </div>
+                        )}
+                        <div>
+                          <div className="font-mono font-bold text-primary text-sm">{v.plateNumber}</div>
+                          <div className="text-xs text-muted-foreground">{v.name}</div>
+                        </div>
+                      </Link>
                     </TableCell>
                     <TableCell>
                       <div className="text-xs text-foreground font-medium">{v.make} {v.model}</div>

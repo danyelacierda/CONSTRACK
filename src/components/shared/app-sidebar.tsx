@@ -37,6 +37,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
   MapPin,
   BarChart3,
   ShieldCheck,
+  UserCheck,
 };
 
 export function AppSidebar() {
@@ -204,27 +205,29 @@ export function AppSidebar() {
           </div>
         </div>
 
-        {/* Live RBAC Role Testing Switcher */}
-        <div className="pt-2 border-t border-border/50">
-          <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider block mb-1">
-            Test Role Simulation
-          </label>
-          <select
-            value={simulatedRole || ""}
-            onChange={(e) => {
-              const val = e.target.value;
-              setSimulatedRole(val ? (val as Role) : null);
-            }}
-            className="w-full text-xs font-mono bg-background border border-border rounded px-2 py-1 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-          >
-            <option value="">Clerk Default ({actualRole})</option>
-            {ROLES.map((r) => (
-              <option key={r} value={r}>
-                {r}
-              </option>
-            ))}
-          </select>
-        </div>
+        {/* Live RBAC Role Testing Switcher - ONLY FOR ADMIN */}
+        {actualRole === "Admin" && (
+          <div className="pt-2 border-t border-border/50">
+            <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider block mb-1">
+              Test Role Simulation
+            </label>
+            <select
+              value={simulatedRole || ""}
+              onChange={(e) => {
+                const val = e.target.value;
+                setSimulatedRole(val ? (val as Role) : null);
+              }}
+              className="w-full text-xs font-mono bg-background border border-border rounded px-2 py-1 text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+            >
+              <option value="">Clerk Default ({actualRole})</option>
+              {ROLES.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
       </div>
     </aside>
   );
