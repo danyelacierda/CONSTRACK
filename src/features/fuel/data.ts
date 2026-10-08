@@ -32,6 +32,8 @@ export async function getFuelRequestsPageData() {
 
   return {
     requests,
+    vehicles,
+    projects,
     vehicleMap: new Map(vehicles.map((v) => [v.id, v.plateNumber])),
     driverMap: new Map(drivers.map((d) => [d.id, d.fullName])),
     projectMap: new Map(projects.map((p) => [p.id, p.name])),

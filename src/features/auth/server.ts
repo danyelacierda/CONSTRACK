@@ -1,7 +1,7 @@
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import { Role } from "@/types/enums";
 import { Permission, hasPermission } from "@/config/rbac";
-import { mapClerkRole } from "./role-context";
+import { mapClerkRole } from "./utils";
 
 /**
  * Retrieves the current authenticated user's role on the server.
@@ -12,8 +12,11 @@ export async function getServerUserRole(): Promise<{
   role: Role;
 }> {
   const { userId, orgId, orgRole, sessionClaims } = await auth();
+  const user = await currentUser();
+  const primaryEmail = user?.primaryEmailAddress?.emailAddress;
+  
   const metadataRole = (sessionClaims?.publicMetadata as { role?: string })?.role;
-  const role = mapClerkRole(orgRole, metadataRole);
+  const role = mapClerkRole(orgRole, metadataRole, primaryEmail);
   return { userId, orgId: orgId ?? null, role };
 }
 

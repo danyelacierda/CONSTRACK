@@ -85,4 +85,11 @@ export const NAV_ITEMS: NavItem[] = [
     permission: "audit:read",
     section: "admin",
   },
+  {
+    title: "User Management",
+    href: "/users",
+    iconName: "UserCheck",
+    permission: "system:settings",
+    section: "admin",
+  },
 ];

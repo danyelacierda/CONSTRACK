@@ -5,6 +5,8 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Users, AlertCircle, CheckCircle2 } from "lucide-react";
 import { RoleGuard } from "@/components/shared/role-guard";
+import { DriverDialog } from "@/features/drivers/components/driver-dialog";
+import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +24,9 @@ export default async function DriversPage() {
             Driver roster, license compliance tracking, and vehicle custody
           </p>
         </div>
+        <RoleGuard permission="drivers:create">
+          <DriverDialog />
+        </RoleGuard>
       </div>
 
       <Card>
@@ -55,8 +60,10 @@ export default async function DriversPage() {
                 return (
                   <TableRow key={d.id}>
                     <TableCell>
-                      <div className="font-mono text-xs font-semibold text-primary">{d.employeeId}</div>
-                      <div className="text-sm font-medium text-foreground">{d.fullName}</div>
+                      <Link href={`/drivers/${d.id}`} className="hover:underline">
+                        <div className="font-mono text-xs font-semibold text-primary">{d.employeeId}</div>
+                        <div className="text-sm font-medium text-foreground">{d.fullName}</div>
+                      </Link>
                     </TableCell>
                     <TableCell className="font-mono text-xs text-foreground">
                       {d.licenseNumber}

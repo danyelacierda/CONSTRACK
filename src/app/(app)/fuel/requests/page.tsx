@@ -6,11 +6,12 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Fuel, Plus, ArrowRight } from "lucide-react";
 import { RoleGuard } from "@/components/shared/role-guard";
+import { FuelRequestDialog } from "@/features/fuel/components/fuel-request-dialog";
 
 export const dynamic = "force-dynamic";
 
 export default async function FuelRequestsPage() {
-  const { requests, vehicleMap, driverMap, projectMap } = await getFuelRequestsPageData();
+  const { requests, vehicles, projects, vehicleMap, driverMap, projectMap } = await getFuelRequestsPageData();
 
   return (
     <RoleGuard permission="fuel:read">
@@ -22,6 +23,9 @@ export default async function FuelRequestsPage() {
             Multi-stage fuel approval pipeline: Request → Approval → Purchase → Verification
           </p>
         </div>
+        <RoleGuard permission="fuel:request">
+          <FuelRequestDialog vehicles={vehicles} projects={projects} />
+        </RoleGuard>
       </div>
 
       <Card>
@@ -54,8 +58,10 @@ export default async function FuelRequestsPage() {
                 return (
                   <TableRow key={r.id}>
                     <TableCell className="font-medium">
-                      <div className="font-mono text-sm font-bold text-primary">{r.requestNumber}</div>
-                      <div className="text-[11px] text-muted-foreground">{new Date(r.createdAt).toLocaleDateString()}</div>
+                      <Link href={`/fuel/requests/${r.id}`} className="hover:underline">
+                        <div className="font-mono text-sm font-bold text-primary">{r.requestNumber}</div>
+                        <div className="text-[11px] text-muted-foreground">{new Date(r.createdAt).toLocaleDateString()}</div>
+                      </Link>
                     </TableCell>
                     <TableCell>
                       <StatusBadge status={r.status} />
